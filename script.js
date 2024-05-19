@@ -8,7 +8,13 @@ const elements = {
   btnCE: document.querySelector("#clear-entry"),
   screen: document.querySelector("#result"),
   calcNumbers: document.querySelector("#calc-numbers"),
+  beepSound: document.getElementById('beepSound')
 }
+
+const beepSound = new Audio('beep.mp3');
+const buttons = document.querySelectorAll('.beep-button');
+
+beepSound.preload = 'auto';
 
 const calculator = {
   numbers: "",
@@ -25,7 +31,11 @@ const calculator = {
   },
 
   displayCalculatedNumbers(number1, operator, number2) {
-    elements.calcNumbers.textContent = `${number1}${operator}${number2}`
+    if (number1 !== undefined && operator !== undefined && number2 !== undefined) {
+      elements.calcNumbers.textContent = `${number1}${operator}${number2}`;
+    } else {
+      console.error('Um ou mais argumentos são undefined:', { number1, operator, number2 });
+    }
   },
 
   saveNumbersToArray() {
@@ -158,8 +168,18 @@ const calculator = {
     this.displayCalculatedNumbers(this.arrayOfNumber[0], this.currentOperation, this.arrayOfNumber[1])
     this.deleteCapturedNumbers()
     this.operatorExecute = false
-  }
+  },
+
+
 }
+
+buttons.forEach(button => {
+  button.addEventListener('click', () => {
+
+    beepSound.currentTime = 0;
+    beepSound.play();
+  });
+});
 
 const App = {
   init() {
